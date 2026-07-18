@@ -25,7 +25,7 @@ jobs:
       - name: Run MLflow Project
         run: |
           # Perintah ini akan membaca MLproject dan mengeksekusi modelling.py
-          mlflow run MLProject --no-conda
+          mlflow run MLProject --env-manager=local
           
       - name: Upload Artifact to Google Drive / GitHub Release
         run: |
