@@ -1,0 +1,8 @@
+digest: e77ef280
+name: dataset
+profile: '{"features_shape": [20, 4], "features_size": 80, "features_nbytes": 640}'
+schema: '{"mlflow_tensorspec": {"features": "[{\"type\": \"tensor\", \"tensor-spec\":
+  {\"dtype\": \"float64\", \"shape\": [-1, 4]}}]", "targets": null}}'
+source: '{"tags": {"mlflow.user": "luthf", "mlflow.source.name": "modelling.py", "mlflow.source.type":
+  "LOCAL", "mlflow.source.git.commit": "c82626f4e32ed1e6c77b8eedc7d128b21632b2a9"}}'
+source_type: code

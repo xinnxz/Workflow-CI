@@ -41,7 +41,7 @@ jobs:
       - name: Build Docker Image using MLflow
         run: |
           # Cari ID run terakhir yang berhasil dibuat di folder mlruns
-          RUN_ID=$(ls -td mlruns/0/* | head -1 | basename)
+          RUN_ID=$(basename $(ls -td mlruns/0/* | head -1))
           
           # Build Docker image langsung dari model MLflow
           mlflow models build-docker -m "mlruns/0/$RUN_ID/artifacts/model" -n "${{ secrets.DOCKER_USERNAME }}/breast-cancer-model:latest"
