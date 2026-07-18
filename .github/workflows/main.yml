@@ -44,8 +44,8 @@ jobs:
 
       - name: Build Docker Image using MLflow
         run: |
-          # Cari ID run terakhir yang berhasil dibuat di folder mlruns
-          RUN_ID=$(ls -t mlruns/0/ | grep -v meta.yaml | head -1)
+          # Cari ID run terakhir yang berhasil dibuat di folder mlruns (berupa 32 karakter hex)
+          RUN_ID=$(ls -1t mlruns/0 | grep -E '^[a-f0-9]{32}$' | head -1)
           echo "Found RUN_ID: $RUN_ID"
 
           # Pastikan folder artifacts/model ada
