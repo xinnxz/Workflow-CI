@@ -32,6 +32,7 @@ def main():
         acc = accuracy_score(y_test, preds)
         
         print(f"Model accuracy: {acc:.4f}")
+        mlflow.sklearn.log_model(model, "model")
         print("Training finished.")
 
 if __name__ == "__main__":
