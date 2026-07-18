@@ -10,6 +10,10 @@ jobs:
   train_and_deploy:
     runs-on: ubuntu-latest
 
+    env:
+      # Paksa MLflow menyimpan semua data ke folder lokal di runner GitHub
+      MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,14 +23,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install MLflow
-        run: pip install mlflow==2.19.0
+      - name: Install dependencies
+        run: pip install mlflow==2.19.0 scikit-learn pandas
 
       - name: Run MLflow Project
         run: |
           # Perintah ini akan membaca MLproject dan mengeksekusi modelling.py
           mlflow run MLProject --env-manager=local
-          
+
       - name: Upload Artifact to Google Drive / GitHub Release
         run: |
           echo "Simulating upload of mlruns to remote storage..."
@@ -41,11 +45,15 @@ jobs:
       - name: Build Docker Image using MLflow
         run: |
           # Cari ID run terakhir yang berhasil dibuat di folder mlruns
-          RUN_ID=$(basename $(ls -td mlruns/0/* | head -1))
-          
+          RUN_ID=$(ls -t mlruns/0/ | grep -v meta.yaml | head -1)
+          echo "Found RUN_ID: $RUN_ID"
+
+          # Pastikan folder artifacts/model ada
+          ls -la "mlruns/0/$RUN_ID/artifacts/model/"
+
           # Build Docker image langsung dari model MLflow
           mlflow models build-docker -m "mlruns/0/$RUN_ID/artifacts/model" -n "${{ secrets.DOCKER_USERNAME }}/breast-cancer-model:latest"
-          
+
       - name: Push Docker Image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/breast-cancer-model:latest
